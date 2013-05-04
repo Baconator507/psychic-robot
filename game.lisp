@@ -1,3 +1,4 @@
+(setf *random-state* (make-random-state t))
 (load "pokerlib7.lisp")
 (load "jose.lisp")
 
