@@ -1,5 +1,5 @@
 (defun action(roundstate id)
-  (print (total_bank roundstate))
+  (print (my_cards roundstate))
   (let ((mybank (aref (holdemround-playerbanks roundstate) id)))
     (cond ((zerop (holdemround-bet roundstate))
            (cond ((and (< (number-of-raises roundstate) 3)
@@ -21,8 +21,18 @@
           (t ;; can't cover the bet or the blind
            (LIST :allin)))))
 
-(defun total_bank(roundstate)
-  (reduce #'+ (holdemround-playerbanks roundstate)))
+(defun total_bank(state)
+  (reduce #'+ (holdemround-playerbanks state)))
+
+(defun my_cards(state)
+  (only_non_nil (holdemround-playercards state)))
+
+(defun only_non_nil(x)
+  (let ((cards nil))
+    (LOOP for hand below (array-dimension x 0) doing
+          (if (eq (aref x hand) nil) ()
+            (print (aref x hand))))))
+
 
 (defparameter *jose* 
   (make-holdemagent
