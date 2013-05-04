@@ -28,10 +28,9 @@
   (only_non_nil (holdemround-playercards state)))
 
 (defun only_non_nil(x)
-  (let ((cards nil))
-    (LOOP for hand below (array-dimension x 0) doing
-          (if (eq (aref x hand) nil) ()
-            (print (aref x hand))))))
+  (LOOP for i below (array-dimension x 0) doing
+        (if (eq (aref x i) nil) ()
+          (setf cards (aref x i))))cards)
 
 
 (defparameter *jose* 
