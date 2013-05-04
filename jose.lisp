@@ -1,20 +1,17 @@
 (defun action(roundstate id)
 
   (cond
-    ((> (aref (holdemround-playerbanks roundstate) id)(* .9 total_bank)) (LIST :allin))
+    ((> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin))
     ;;(scenario2 action2)
     ;;(scenario3 action3)
-    (t (case (random 5)
+    (t (case (random 4)
         (1 (LIST :raise (holdemround-blind roundstate)))
-        (2 (LIST :allin))
-        (3 (LIST :fold))
-        (4 (LIST :check))
-        (5 (LIST :call))))
+        
+        (2 (LIST :fold))
+        (3 (LIST :check))
+        (4 (LIST :call))))
   )
-
-
-
-  )
+)
 
 
 
