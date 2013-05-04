@@ -4,4 +4,4 @@
 (defparameter *game-players* 
   (list *aggressive-caller-agent* *less-aggressive-caller-agent* *jose* *raiser-agent*))
 
-(holdem-game-driver *game-players* :verbose t :pauser t)
+(holdem-game-driver *game-players* :verbose t :pauser nil)
