@@ -1,5 +1,4 @@
 (defun action(roundstate id)
-  (print (my_cards roundstate id))
 
   (cond
     ((> (aref (holdemround-playerbanks roundstate) id)(* .9 total_bank)) (LIST :allin))
