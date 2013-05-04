@@ -10,6 +10,7 @@
 (defun total_bank(state)
   (reduce #'+ (holdemround-playerbanks state)))
 
+
 (defun my_cards(state id)
   (aref (holdemround-playercards state) id))
 
