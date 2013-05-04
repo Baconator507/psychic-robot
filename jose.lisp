@@ -22,7 +22,7 @@
            (LIST :allin)))))
 
 (defun total_bank(roundstate)
-  (holdemround-playerbanks roundstate))
+  (reduce #'+ (holdemround-playerbanks roundstate)))
 
 (defparameter *jose* 
   (make-holdemagent
