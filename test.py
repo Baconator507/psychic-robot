@@ -24,7 +24,7 @@ def clisp(x):
     p = subprocess.Popen("clisp --quiet --silent game.lisp", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     try:
-      jose = output.split(':')[2].split(' ')[3] #assuming jose is always at position 3
+      jose = output.split(' ')[3] #assuming jose is always at position 3 (10k 1 2 3 4)
       if (jose == '40000'):
         counter.value += 1
       done += 1

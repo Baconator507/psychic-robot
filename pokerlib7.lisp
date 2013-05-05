@@ -789,8 +789,8 @@ the BETTERHAND function in that it does not return the actual better hand, just 
 (defun print-holdemround (obj str depth)
   "Displays a HOLDEMGAME structure."
   (declare (ignore depth))
-  (format str "<HOLDEMROUND players:~A banks:~A deal:~D pot:~F commoncards:~A playercards:~A turn:~D>"
-          (holdemround-players obj) (holdemround-playerbanks obj) (holdemround-dealerpos obj) (holdemround-pots obj)
+  (format str "<HOLDEMROUND players:~A deal:~D pot:~F commoncards:~A playercards:~A turn:~D>"
+          (holdemround-players obj) (holdemround-dealerpos obj) (holdemround-pots obj)
           (hand-to-sym (holdemround-commoncards obj))
           (loop for i from 1 to (1- (length (holdemround-playercards obj))) collecting
                 (hand-to-sym (aref (holdemround-playercards obj) i)))

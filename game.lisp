@@ -6,4 +6,4 @@
   (list *aggressive-caller-agent* *less-aggressive-caller-agent* *jose* *raiser-agent*))
 
 (setf holdem (holdem-game-driver *game-players* :verbose nil :pauser nil))
-(if (eq holdem nil) (print "game crashed") (print holdem))
+(if (eq holdem nil) (print "game crashed") (print (holdemround-playerbanks holdem)))
