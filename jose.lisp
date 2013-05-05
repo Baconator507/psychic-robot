@@ -7,14 +7,15 @@
 
 
 (defun aggresive(state id)
-  (cond
-    ((> (aref (holdemround-playerbanks state) id)(* .9 (total_bank state))) (LIST :allin)) ;;try to finish off players
+  (if (> (aref (holdemround-playerbanks state) id)(* .9 (total_bank state))) (LIST :allin)) ;;try to finish off players
+  ;;(cond
     ;;(scenario2 action2)
     ;;(scenario3 action3)
-  )
+  ;;)
 )
 
 (defun conservative(state id)
+    (if (> (aref (holdemround-playerbanks state) id)(* .9 (total_bank state))) (LIST :allin)) ;;try to finish off players
     (case (random 2)
       (1 (LIST :raise (holdemround-blind state)))
       (2 (LIST :check))))
