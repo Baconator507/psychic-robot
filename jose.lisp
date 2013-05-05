@@ -17,7 +17,7 @@
         (mybank (aref (holdemround-playerbanks state) id)))
   (if (or (flushp cards) (straightp cards) (straightflushp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
     (LIST :raise (+ (floor (* .45 mybank)) (holdemround-blind state))) 
-    (if (and (or (pairp cards) (tripsp cards) (twopairp cards) (< 5 (list-length (holdemround-commoncards state)))) (< (holdemround-bet roundstate) ( * 0.15 mybank)))  ;; not so good
+    (if (and (or (pairp cards) (tripsp cards) (twopairp cards) (< 5 (list-length (holdemround-commoncards state)))) (< (holdemround-bet state) ( * 0.15 mybank)))  ;; not so good
       (case (random 3)
         (0 (LIST :raise (+ (floor (* .10 mybank)) (holdemround-blind state))))
         (t (LIST :call)))
