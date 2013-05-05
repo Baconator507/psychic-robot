@@ -2,28 +2,32 @@
   (if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
   (case (list-length (holdemround-commoncards roundstate))
     (0 (return-from action (blind roundstate id)))
-    (3 (return-from action (blind roundstate id)))
-    (4 (return-from action (blind roundstate id)))
-    (5 (return-from action (blind roundstate id)))))
+    (3 (return-from action (informed roundstate id)))
+    (4 (return-from action (informed roundstate id)))
+    (5 (return-from action (informed roundstate id)))))
 
 
 (defun informed(state id)
+  (print (hand-strength (append (my_cards state id) (holdemround-commoncards state))))
+  (LIST :check)
   ;;(cond
     ;;(scenario2 action2)
     ;;(scenario3 action3)
   ;;)
+  ;;
 )
 
 (defun blind(state id)
     (if (pairp (my_cards state id))
       (case (random 2)
-        (1 (LIST :raise (floor (* .15 (total_bank state)))))
+        (1 (LIST :raise (floor (* .15 (aref (holdemround-playerbanks state) id)))))
         (2 (LIST :call))))
-    (case (random 3)
+    (case (random 4)
       (1 (LIST :raise (holdemround-blind state)))
       (2 (LIST :check))
-      (3 (LIST :call))
-      (t (LIST :fold))))
+      (3 (LIST :fold))
+      (4 (LIST :raise (holdemround-blind state)))
+      (t (LIST :call))))
 
 (defun total_bank(state)
   (reduce #'+ (holdemround-playerbanks state)))
