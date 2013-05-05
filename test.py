@@ -27,7 +27,7 @@ def clisp(x):
       jose = output.split(':')[2].split(' ')[3] #assuming jose is always at position 3
       if (jose == '40000'):
         counter.value += 1
-        done += 1
+      done += 1
     except:
       continue
 
