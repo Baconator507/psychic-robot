@@ -1733,7 +1733,7 @@ current pot."
 ;;         to see a whole game generated at once.
 (defun holdem-game-driver (agentlist &key (blindroundcount 10) (startblind 100) (bank 10000) (verbose nil) (pauser nil))
   (let ((roundnum 0)
-        (seating (randomize-list agentlist))
+        (seating agentlist)
         (deck nil)
         (baseroundstate (create-holdemround (length agentlist) bank startblind)))
     ;;set up tournament
