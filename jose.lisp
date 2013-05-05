@@ -2,9 +2,13 @@
   (if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
   (case (list-length (holdemround-commoncards roundstate))
     (0 (return-from action (blind roundstate id)))
-    (3 (return-from action (informed roundstate id)))
-    (4 (return-from action (informed roundstate id)))
-    (5 (return-from action (informed roundstate id)))))
+        ;;you can only see your two cards
+    (3 (return-from action (blind roundstate id)))
+        ;;you can see the three cards on the table and your two cards
+    (4 (return-from action (blind roundstate id)))
+        ;;you can see the four cards on the table and your two cards
+    (5 (return-from action (blind roundstate id)))))
+        ;;you can see all five cards on the table and your two cards
 
 
 (defun informed(state id)
