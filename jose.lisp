@@ -1,7 +1,7 @@
 (defun action(roundstate id)
   (if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
 
-  (if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
+  ;;(if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
   
   (case (list-length (holdemround-commoncards roundstate))
     (0 (return-from action (before-flop roundstate id)))
@@ -30,15 +30,29 @@
     ) 
 ))
 
-(defun before-flop(state id)
-  (if (> (aref (holdemround-playerbanks state) id) (holdemround-blind state)) (LIST :allin))
-    (if (pairp (my_cards state id))
-      (case (random 2)
-        (0 (LIST :raise (holdemround-blind state)))
-        (1 (LIST :call))))
-    (case (random 3)
-      (0 (LIST :call))
-      (t (LIST :check))))
+(defun before-flop(state id);this function gets called before there are any common cards
+    (cond
+      ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          ()
+      )
+      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+          ()
+      )
+
+    );;end conditional
+
+
+
+    ; (if (pairp (my_cards state id));;if my two cards are a pair
+          
+    ;     (if (> mymoney (+ (holdemround-blind roundstate)(holdemround-bet roundstate)))
+    ;         (LIST :raise holdemround-blind) 
+    ;         (LIST :allin)
+    ;     )
+          
+
+    ;);end if
+)
 
 (defun total_bank(state)
   (reduce #'+ (holdemround-playerbanks state)))
@@ -47,10 +61,10 @@
   (aref (holdemround-playercards state) id))
 
 (defun bet(roundstate)
-  (let (mybank (aref (holdemround-playerbanks roundstate) id))
+  (let (mymoney (aref (holdemround-playerbanks roundstate) id))
     
     (cond 
-      (> mybank (+ (holdemround-blind roundstate)(holdemround-bet roundstate)))
+      (> mymoney (+ (holdemround-blind roundstate)(holdemround-bet roundstate)))
             (LIST :raise (holdemround-blind roundstate))
       (t) 
             (LIST :allin));;end of cond
