@@ -8,10 +8,10 @@
 
 
 (defun informed(state id)
-  (if (> (hand-strength (append (my_cards state id) (holdemround-commoncards state))) 50000)
-    (LIST :raise (floor (* .25 (aref (holdemround-playerbanks state) id)))) 
-    ;;else
-    (LIST :check))
+  (setf cards (append (my_cards state id) (holdemround-commoncards state)))
+  (setf strenght (hand-strength cards))
+  (print strenght)
+  (LIST :raise (+ (floor (* .25 (aref (holdemround-playerbanks state) id))) (holdemround-blind state))) 
   ;;(cond
     ;;(scenario2 action2)
     ;;(scenario3 action3)
