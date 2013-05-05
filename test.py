@@ -2,7 +2,7 @@
 from multiprocessing import Pool
 import subprocess
 
-def clisp(x):
+def clisp():
   count = 0
   for i in range(100):
     p = subprocess.Popen("clisp game.lisp", stdout=subprocess.PIPE, shell=True)
@@ -17,6 +17,4 @@ def clisp(x):
   print "jose win ration: %0.2f" % ((count/100.0) * 100)
 
 if __name__ == '__main__':
-    pool = Pool(processes=4)             
-    result = pool.map_async(clisp, range(4))
-    result.get(timeout=10000) 
+  clisp()
