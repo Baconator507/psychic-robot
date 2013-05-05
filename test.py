@@ -21,7 +21,7 @@ def clisp(x):
   global counter
   done = 0
   while (done < trials):
-    p = subprocess.Popen("clisp game.lisp", stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen("clisp --quiet --silent game.lisp", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     try:
       jose = output.split(':')[2].split(' ')[3] #assuming jose is always at position 3
