@@ -4,8 +4,13 @@ import subprocess
 import sys
 import time
 
+if len(sys.argv) < 3:
+  print "usage: python test.py <CORES> <JOBS PER CORE>"
+  exit(0)
+
 counter = None
-trials = int(sys.argv[1])
+trials = int(sys.argv[2])
+cores = int(sys.argv[1])
 
 def init(args):
     ''' store the counter for later use '''
@@ -15,7 +20,7 @@ def init(args):
 def clisp(x):
   global counter
   done = 0
-  while (done < trials/4):
+  while (done < trials):
     p = subprocess.Popen("clisp game.lisp", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     try:
@@ -29,7 +34,7 @@ def clisp(x):
 if __name__ == '__main__':
     # initialize a cross-process counter and the input lists
     counter = Value('i', 0)
-    inputs = [1, 2, 3, 4] #4 threads
+    inputs = range(cores)
 
     # create the pool of workers, ensuring each one receives the counter 
     start = time.time()
@@ -37,5 +42,5 @@ if __name__ == '__main__':
     i = p.map_async(clisp, inputs, chunksize = 1)
     i.wait()
     print "done in %d seconds" % (time.time() - start)
-    print "jose win ration: %0.2f" % ((counter.value/float(trials)) * 100)
+    print "jose's win ratio: %0.2f" % ((counter.value/float(cores * trials)) * 100)
 
