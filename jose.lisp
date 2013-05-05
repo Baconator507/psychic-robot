@@ -23,10 +23,10 @@
         (1 (LIST :raise (floor (* .15 (aref (holdemround-playerbanks state) id)))))
         (2 (LIST :call))))
     (case (random 4)
-      (1 (LIST :raise (holdemround-blind state)))
+      (1 (LIST :raise (floor (* .05 (aref (holdemround-playerbanks state) id)))))
       (2 (LIST :check))
       (3 (LIST :fold))
-      (4 (LIST :raise (holdemround-blind state)))
+      (4 (LIST :raise (floor (* .05 (aref (holdemround-playerbanks state) id)))))
       (t (LIST :call))))
 
 (defun total_bank(state)
