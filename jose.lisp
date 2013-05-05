@@ -1,8 +1,10 @@
 (defun action(roundstate id)
-  (if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
   (if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
+
+  (if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
+  
   (case (list-length (holdemround-commoncards roundstate))
-    (0 (return-from action (blind roundstate id)))
+    (0 (return-from action (before-flop roundstate id)))
         ;;you can only see your two cards
     (3 (return-from action (informed roundstate id)))
         ;;you can see the three cards on the table and your two cards
@@ -28,7 +30,7 @@
     ) 
 ))
 
-(defun blind(state id)
+(defun before-flop(state id)
   (if (> (aref (holdemround-playerbanks state) id) (holdemround-blind state)) (LIST :allin))
     (if (pairp (my_cards state id))
       (case (random 2)
@@ -43,6 +45,17 @@
 
 (defun my_cards(state id)
   (aref (holdemround-playercards state) id))
+
+(defun bet(roundstate)
+  (let (mybank (aref (holdemround-playerbanks roundstate) id))
+    
+    (cond 
+      (> mybank (+ (holdemround-blind roundstate)(holdemround-bet roundstate)))
+            (LIST :raise (holdemround-blind roundstate))
+      (t) 
+            (LIST :allin));;end of cond
+  );;end of let
+);;end of bet
 
 (defparameter *jose* 
   (make-holdemagent
