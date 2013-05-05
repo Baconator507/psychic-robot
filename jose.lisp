@@ -1,21 +1,23 @@
 (defun action(roundstate id)
+  (case (list-length (holdemround-commoncards roundstate))
+    (0 (return-from action (conservative roundstate id)))
+    (3 (return-from action (conservative roundstate id)))
+    (4 (return-from action (conservative roundstate id)))
+    (5 (return-from action (aggresive roundstate id)))))
 
+
+(defun aggresive(state id)
   (cond
-    ((> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin))
+    ((> (aref (holdemround-playerbanks state) id)(* .9 (total_bank state))) (LIST :allin)) ;;try to finish off players
     ;;(scenario2 action2)
     ;;(scenario3 action3)
-    (t (case (random 4)
-        (1 (LIST :raise (holdemround-blind roundstate)))
-        
-        (2 (LIST :fold))
-        (3 (LIST :check))
-        (4 (LIST :call))))
   )
 )
 
-
-
-
+(defun conservative(state id)
+    (case (random 2)
+      (1 (LIST :raise (holdemround-blind state)))
+      (2 (LIST :check))))
 
 (defun total_bank(state)
   (reduce #'+ (holdemround-playerbanks state)))
