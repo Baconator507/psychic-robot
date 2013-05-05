@@ -5,16 +5,16 @@
         ;;you can only see your two cards
     (3 (return-from action (informed roundstate id)))
         ;;you can see the three cards on the table and your two cards
-    (4 (return-from action (informed roundstate id)))
+    (4 (return-from action (blind roundstate id)))
         ;;you can see the four cards on the table and your two cards
-    (5 (return-from action (informed roundstate id)))))
+    (5 (return-from action (blind roundstate id)))))
         ;;you can see all five cards on the table and your two cards
 
 
 (defun informed(state id)
   (setf cards (append (my_cards state id) (holdemround-commoncards state)))
   (setf mybank (aref (holdemround-playerbanks state) id))
-  (if (or (flushp cards) (straightp cards) (straightflushp cards)) ;; if I have something good
+  (if (or (flushp cards) (straightp cards) (straightflushp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
     (LIST :raise (+ (floor (* .25 mybank)) (holdemround-blind state))) 
     ;; If my hand sucks:
     (if (< (holdemround-bet state) (* .15 mybank)) ;; if bet is under 15% of my bank
@@ -23,6 +23,7 @@
 )
 
 (defun blind(state id)
+  (if (> (aref (holdemround-playerbanks state) id) (holdemround-blind state)) (LIST :allin))
     (if (pairp (my_cards state id))
       (case (random 2)
         (0 (LIST :raise  (holdemround-blind state)))
@@ -30,7 +31,7 @@
     (case (random 5)
       (0 (LIST :raise  (holdemround-blind state)))
       (1 (LIST :check))
-      (2 (LIST :fold))
+      (2 (LIST :call))
       (3 (LIST :raise  (holdemround-blind state)))
       (4 (LIST :call))))
 
