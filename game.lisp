@@ -5,4 +5,5 @@
 (defparameter *game-players* 
   (list *aggressive-caller-agent* *less-aggressive-caller-agent* *jose* *raiser-agent*))
 
-(print (holdem-game-driver *game-players* :verbose nil :pauser nil))
+(setf holdem (holdem-game-driver *game-players* :verbose nil :pauser nil))
+(if (eq holdem nil) (print "game crashed") (print holdem))
