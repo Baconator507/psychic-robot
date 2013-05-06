@@ -1,3 +1,6 @@
+;(defpackage "Jose")
+;(in-package "Jose")
+;(export (list informed blind betamount action my_bank total_bank))
 (defun action(roundstate id)
   ;(format t "abcde")
 
