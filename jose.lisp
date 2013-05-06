@@ -1,10 +1,9 @@
 (defun action(roundstate id)
+  (if (eq (car (car (holdemround-actions roundstate))) 0) (LIST :FOLD))
   (if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
   ;;(if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
   (if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
-
   ;;(if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
-  (format t  "abcdef")
   (case (list-length (holdemround-commoncards roundstate))
     (0 (return-from action (before-flop roundstate id)))
         ;;you can only see your two cards
@@ -45,27 +44,21 @@
 
 
 (defun after-flop(state id)
-  (format t "after-flop was called")
 
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
-          (format t " about to progn ")
           (progn 
-              (format t "no bet so far")
               (LIST :check)
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
-          (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
             (LIST :call)
           )
 
       )
       (t
           (progn
-              (format t "somehow neither of these conditions were met")
               (LIST :allin) 
           )
           
@@ -95,26 +88,20 @@
 
 
 (defun after-turn(state id)
-  (format t "after-turn called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
-          (format t " about to progn ")
           (progn 
-              (format t "no bet so far")
               (LIST :check)
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
-          (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
             (LIST :call)
           )
 
       )
       (t
           (progn
-              (format t "somehow neither of these conditions were met")
               (LIST :allin) 
           )
           
@@ -126,26 +113,20 @@
 )
 
 (defun after-river(state id)
-  (format t "after-river called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
-          (format t " about to progn ")
           (progn 
-              (format t "no bet so far")
               (LIST :check)
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
-          (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
             (LIST :call)
           )
 
       )
       (t
           (progn
-              (format t "somehow neither of these conditions were met")
               (LIST :allin) 
           )
           
@@ -157,25 +138,19 @@
 )
 
 (defun before-flop(state id);this function gets called before there are any common cards
-  (format t "before flop was called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
-          (format t " about to progn ")
           (progn 
-              (format t "no bet so far")
               (LIST :check)
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
-          (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
             (LIST :call)
           )
       )
       (t
           (progn
-              (format t "somehow neither of these conditions were met")
               (LIST :allin) 
           )
           
