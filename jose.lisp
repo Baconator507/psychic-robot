@@ -208,7 +208,7 @@
 (defun my_cards(state id)
   (aref (holdemround-playercards state) id))
 
-(defun betamount(state id (amount 0.01))
+(defun betamount(state id amount)
   ;(format t "made bet")
   (let ((mybank (aref (holdemround-playerbanks state) id))(minbet (+ (holdemround-blind state)(holdemround-bet state))))
     (cond 
