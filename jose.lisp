@@ -2,12 +2,8 @@
   (if (eq (car (car (holdemround-actions roundstate))) 0) (LIST :FOLD))
   (if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
   ;;(if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
-  (if (> (aref (holdemround-playerbanks roundstate) id)(* .9 (total_bank roundstate))) (LIST :allin)) ;;try to finish off players
-
-  ;;(if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
-  (format t  "abcdef")
   (case (list-length (holdemround-commoncards roundstate))
-    (0 (return-from action (before-flop roundstate id)))
+    (0 (return-from action (blind roundstate id)))
         ;;you can only see your two cards
     (3 (return-from action (after-flop roundstate id)))
         ;;you can see the three cards on the table and your two cards
@@ -16,20 +12,19 @@
     (5 (return-from action (after-river roundstate id)))))
         ;;you can see all five cards on the table and your two cards
 
-
 (defun informed(state id)
   (let ((cards (append (my_cards state id) (holdemround-commoncards state)))
         (mybank (aref (holdemround-playerbanks state) id)))
-  (if (or (flushp cards) (straightp cards) (tripsp cards) (straightflushp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
-    (LIST :raise (+ (floor (* .35 mybank)) (holdemround-blind state))) 
-    (if (and (or (pairp cards) (twopairp cards) (< 5 (list-length (holdemround-commoncards state)))) (< (holdemround-bet state) ( * 0.15 mybank)))  ;; not so good
+  (if (or (flushp cards) (straightp cards) (straightflushp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
+    (return-from informed (betamount state id 0.40))
+    (if (and (or (pairp cards) (twopairp cards) (tripsp cards) (< 5 (list-length (holdemround-commoncards state)))) (< (holdemround-bet state) ( * 0.75 mybank)))  ;; not so good
       (case (random 3)
-        (0 (LIST :raise (+ (floor (* .10 mybank)) (holdemround-blind state))))
+        (0 (return-from informed (betamount state id 0.13)))
         (t (LIST :call)))
       ;; my hand sucks
-      (if (and (< (holdemround-bet state) (* .15 mybank)) (< 5 (list-length (holdemround-commoncards state)))) ;; if bet is under 15% of my bank
-          (LIST :call)
-        (LIST :check)))
+      (if (and (< (holdemround-bet state) (* .35 mybank))(< 5 (list-length (holdemround-commoncards state)))) ;; if bet is under 15% of my bank
+          (LIST :check)
+        (LIST :call)))
     ) 
 ))
 
@@ -38,7 +33,7 @@
   (if (> (aref (holdemround-playerbanks state) id) (holdemround-blind state)) (LIST :allin))
     (if (pairp (my_cards state id))
       (case (random 2)
-        (0 (LIST :raise (holdemround-blind state)))
+        (0 (return-from blind (betamount state id 0.10)))
         (1 (LIST :call))))
     (if (< (holdemround-bet state) (* 0.15 mybank))
       (LIST :call)
@@ -46,27 +41,20 @@
 
 
 (defun after-flop(state id)
-  (format t "after-flop was called")
-
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
-          (format t " about to progn ")
           (progn 
-              (format t "no bet so far")
               (LIST :check)
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
-          (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
             (LIST :call)
           )
 
       )
       (t
           (progn
-              (format t "somehow neither of these conditions were met")
               (LIST :allin) 
           )
           
@@ -96,26 +84,20 @@
 
 
 (defun after-turn(state id)
-  (format t "after-turn called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
-          (format t " about to progn ")
           (progn 
-              (format t "no bet so far")
               (LIST :check)
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
-          (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
             (LIST :call)
           )
 
       )
       (t
           (progn
-              (format t "somehow neither of these conditions were met")
               (LIST :allin) 
           )
           
@@ -127,26 +109,20 @@
 )
 
 (defun after-river(state id)
-  (format t "after-river called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
-          (format t " about to progn ")
           (progn 
-              (format t "no bet so far")
               (LIST :check)
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
-          (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
             (LIST :call)
           )
 
       )
       (t
           (progn
-              (format t "somehow neither of these conditions were met")
               (LIST :allin) 
           )
           
@@ -204,13 +180,14 @@
 (defun my_cards(state id)
   (aref (holdemround-playercards state) id))
 
-(defun betamount(roundstate)
+(defun betamount(state id (amount 0.01))
+  (let ((mybank (aref (holdemround-playerbanks state) id))(minbet (+ (holdemround-blind state)(holdemround-bet state))))
     (cond 
-      (> (aref (holdemround-playerbanks roundstate) id) (+ (holdemround-blind roundstate)(holdemround-bet roundstate)))
-            (LIST :raise (holdemround-blind roundstate))
-      (t) 
-            (LIST :allin));;end of cond
-);;end of bet
+      ((> mybank minbet)
+        (LIST :raise (+ (floor (* amount mybank )) minbet)))
+      (t 
+        (LIST :allin)));;end of cond
+));;end of bet
 
 (defparameter *jose* 
   (make-holdemagent
