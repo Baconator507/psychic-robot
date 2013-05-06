@@ -30,7 +30,7 @@
         (0 (return-from informed (betamount state id 0.15)))
         (t (LIST :call)))
       ;; my hand sucks
-      (if (and (< (holdemround-bet state) (* .20 mybank)) (<= public_cards 5)) ;; if bet is under 15% of my bank
+      (if (and (< (holdemround-bet state) (* .20 mybank)) (< public_cards 5)) ;; if bet is under 15% of my bank
           (LIST :call)
          (LIST :check)))
     ) 
