@@ -20,6 +20,7 @@
 
 (defun after-flop(state id)
   (format t "after-flop was called")
+
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
           (progn 
@@ -34,9 +35,11 @@
           )
 
       )
+      (t
+          (format t "somehow neither of these conditions were met")
+      )
 
     );;end conditional
-
 
 
 
@@ -75,7 +78,9 @@
           )
 
       )
-
+      (t
+          (format t "somehow neither of these conditions were met")
+      )
     );;end conditional
 
 
@@ -98,16 +103,18 @@
           )
 
       )
-
+      (t
+          (format t "somehow neither of these conditions were met")
+      )
     );;end conditional
-
 
 
 
 )
 
 (defun before-flop(state id);this function gets called before there are any common cards
-  (format t "before flop was called")
+  (progn
+    (format t "before flop was called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
           (progn 
@@ -120,10 +127,14 @@
             (format t "there has been a bet so far")
             (LIST :call)
           )
-
+      )
+      (t
+          (format t "somehow neither of these conditions were met")
       )
 
     );;end conditional
+    )
+    
 
 
 
