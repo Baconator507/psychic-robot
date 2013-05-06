@@ -23,7 +23,6 @@ def clisp(x):
   while (done < trials):
     p = subprocess.Popen("clisp --quiet --silent game.lisp", stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
-    print output
     try:
       jose = output.split(' ')[3] #assuming jose is always at position 3 (10k 1 2 3 4)
       if (jose == '40000'):
