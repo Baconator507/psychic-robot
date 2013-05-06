@@ -23,9 +23,9 @@
 (defun informed(state id)
   (let ((cards (append (my_cards state id) (holdemround-commoncards state)))
         (mybank (aref (holdemround-playerbanks state) id))(public_cards (list-length (holdemround-commoncards state))))
-  (if (or (flushp cards) (straightp cards) (straightflushp cards) (tripsp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
+  (if (or (flushp cards) (straightp cards) (straightflushp cards)(fullhousep cards) (fourkindp cards) ) ;; if I have something good
     (return-from informed (betamount state id 0.55))
-    (if (and (or (pairp cards) (twopairp cards)(< public_cards 4) ) (< (holdemround-bet state) ( * 0.25 mybank)))  ;; not so good
+    (if (and (or (pairp cards) (twopairp cards)(< public_cards 4) ) (tripsp cards) (< (holdemround-bet state) ( * 0.10 bank)) (< (holdemround-bet state) ( * 0.25 mybank)))  ;; not so good
       (case (random 3)
         (0 (return-from informed (betamount state id 0.15)))
         (t (LIST :call)))
