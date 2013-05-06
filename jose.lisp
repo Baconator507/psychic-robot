@@ -157,9 +157,10 @@
 )
 
 (defun before-flop(state id);this function gets called before there are any common cards
-  (format t "before flop was called")
+  (format t " before flop was called ")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
+        ;; basically the options here should be to check or to raise or to go all in
           (format t " about to progn ")
           (progn 
               (format t "no bet so far")
@@ -167,9 +168,10 @@
           )
       )
       ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
+        ;;basically the options here should be to call or to raise or to go all in
           (format t " about to progn ")
           (progn
-            (format t "there has been a bet so far")
+            (format t " there has been a bet so far ")
             (LIST :call)
           )
       )
