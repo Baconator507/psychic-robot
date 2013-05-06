@@ -27,6 +27,9 @@ def clisp(x):
       jose = output.split(' ')[3] #assuming jose is always at position 3 (10k 1 2 3 4)
       if (jose == '40000'):
         counter.value += 1
+        print str(done) + "Jose GANO!"
+      else:
+        print str(done) + "Jose Murio"
       done += 1
     except:
       continue
