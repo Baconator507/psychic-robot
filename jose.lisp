@@ -6,29 +6,105 @@
   (case (list-length (holdemround-commoncards roundstate))
     (0 (return-from action (before-flop roundstate id)))
         ;;you can only see your two cards
-    (3 (return-from action (informed roundstate id)))
+    (3 (return-from action (after-flop roundstate id)))
         ;;you can see the three cards on the table and your two cards
-    (4 (return-from action (informed roundstate id)))
+    (4 (return-from action (after-turn roundstate id)))
         ;;you can see the four cards on the table and your two cards
-    (5 (return-from action (informed roundstate id)))))
+    (5 (return-from action (after-river roundstate id)))))
         ;;you can see all five cards on the table and your two cards
 
 
-(defun informed(state id)
-  (let ((cards (append (my_cards state id) (holdemround-commoncards state)))
-        (mybank (aref (holdemround-playerbanks state) id)))
-  (if (or (flushp cards) (straightp cards) (straightflushp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
-    (LIST :raise (+ (floor (* .45 mybank)) (holdemround-blind state))) 
-    (if (and (or (pairp cards) (tripsp cards) (twopairp cards) (< 5 (list-length (holdemround-commoncards state)))) (< (holdemround-bet state) ( * 0.15 mybank)))  ;; not so good
-      (case (random 3)
-        (0 (LIST :raise (+ (floor (* .10 mybank)) (holdemround-blind state))))
-        (t (LIST :call)))
-      ;; my hand sucks
-      (if (and (< (holdemround-bet state) (* .15 mybank)) (< 5 (list-length (holdemround-commoncards state)))) ;; if bet is under 15% of my bank
-          (LIST :call)
-        (LIST :check)))
-    ) 
-))
+
+
+
+
+(defun after-flop(state id)
+  (format t "after-flop was called")
+    (cond
+      ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          (progn 
+              (format t "no bet so far")
+              (LIST :check)
+          )
+      )
+      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+          (progn
+            (format t "there has been a bet so far")
+            (LIST :call)
+          )
+
+      )
+
+    );;end conditional
+
+
+
+
+
+)
+;   (let ((cards (append (my_cards state id) (holdemround-commoncards state)))
+;         (mybank (aref (holdemround-playerbanks state) id)))
+;   (if (or (flushp cards) (straightp cards) (straightflushp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
+;     (LIST :raise (+ (floor (* .45 mybank)) (holdemround-blind state))) 
+;     (if (and (or (pairp cards) (tripsp cards) (twopairp cards) (< 5 (list-length (holdemround-commoncards state)))) (< (holdemround-bet state) ( * 0.15 mybank)))  ;; not so good
+;       (case (random 3)
+;         (0 (LIST :raise (+ (floor (* .10 mybank)) (holdemround-blind state))))
+;         (t (LIST :call)))
+;       ;; my hand sucks
+;       (if (and (< (holdemround-bet state) (* .15 mybank)) (< 5 (list-length (holdemround-commoncards state)))) ;; if bet is under 15% of my bank
+;           (LIST :call)
+;         (LIST :check)))
+;     ) 
+; ))
+
+
+
+(defun after-turn(state id)
+  (format t "after-turn called")
+    (cond
+      ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          (progn 
+              (format t "no bet so far")
+              (LIST :check)
+          )
+      )
+      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+          (progn
+            (format t "there has been a bet so far")
+            (LIST :call)
+          )
+
+      )
+
+    );;end conditional
+
+
+
+)
+
+(defun after-river(state id)
+  (format t "after-river called")
+    (cond
+      ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          (progn 
+              (format t "no bet so far")
+              (LIST :check)
+          )
+      )
+      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+          (progn
+            (format t "there has been a bet so far")
+            (LIST :call)
+          )
+
+      )
+
+    );;end conditional
+
+
+
+
+)
 
 (defun before-flop(state id);this function gets called before there are any common cards
   (format t "before flop was called")
