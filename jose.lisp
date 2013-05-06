@@ -23,12 +23,14 @@
 
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          (format t " about to progn ")
           (progn 
               (format t "no bet so far")
               (LIST :check)
           )
       )
-      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+      ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
+          (format t " about to progn ")
           (progn
             (format t "there has been a bet so far")
             (LIST :call)
@@ -36,7 +38,11 @@
 
       )
       (t
-          (format t "somehow neither of these conditions were met")
+          (progn
+              (format t "somehow neither of these conditions were met")
+              (LIST :allin) 
+          )
+          
       )
 
     );;end conditional
@@ -66,12 +72,14 @@
   (format t "after-turn called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          (format t " about to progn ")
           (progn 
               (format t "no bet so far")
               (LIST :check)
           )
       )
-      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+      ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
+          (format t " about to progn ")
           (progn
             (format t "there has been a bet so far")
             (LIST :call)
@@ -79,7 +87,11 @@
 
       )
       (t
-          (format t "somehow neither of these conditions were met")
+          (progn
+              (format t "somehow neither of these conditions were met")
+              (LIST :allin) 
+          )
+          
       )
     );;end conditional
 
@@ -91,12 +103,14 @@
   (format t "after-river called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          (format t " about to progn ")
           (progn 
               (format t "no bet so far")
               (LIST :check)
           )
       )
-      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+      ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
+          (format t " about to progn ")
           (progn
             (format t "there has been a bet so far")
             (LIST :call)
@@ -104,7 +118,11 @@
 
       )
       (t
-          (format t "somehow neither of these conditions were met")
+          (progn
+              (format t "somehow neither of these conditions were met")
+              (LIST :allin) 
+          )
+          
       )
     );;end conditional
 
@@ -113,27 +131,31 @@
 )
 
 (defun before-flop(state id);this function gets called before there are any common cards
-  (progn
-    (format t "before flop was called")
+  (format t "before flop was called")
     (cond
       ((zerop (holdemround-bet state));;what to do if there is no bet so far
+          (format t " about to progn ")
           (progn 
               (format t "no bet so far")
               (LIST :check)
           )
       )
-      ((> 0 (holdemround-bet state));;what to do if there has been a bet so far
+      ((> (holdemround-bet state) 0);;what to do if there has been a bet so far
+          (format t " about to progn ")
           (progn
             (format t "there has been a bet so far")
             (LIST :call)
           )
       )
       (t
-          (format t "somehow neither of these conditions were met")
+          (progn
+              (format t "somehow neither of these conditions were met")
+              (LIST :allin) 
+          )
+          
       )
 
     );;end conditional
-    )
     
 
 
