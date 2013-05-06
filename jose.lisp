@@ -1,38 +1,38 @@
 (defun action(roundstate id)
   ;(format t "abcde")
 
-  (if (eq (car (car (holdemround-actions roundstate))) 0)  (return-from action (LIST :FOLD)))
+  (if (string= (symbol-name (car (cdr (car (holdemround-actions roundstate))))) "CLEANUP")  (return-from action (LIST :FOLD)))
 
-  (if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
+  ;(if (zerop (holdemround-bet roundstate)) (LIST :check) ) 
   
-  (if (> (aref (holdemround-playerbanks roundstate) id)(* .85 (total_bank roundstate))) 
-      (progn  
-        ;(format t "85tile")
-      (return-from action (LIST :allin)))) ;;try to finish off players
+;  (if (> (aref (holdemround-playerbanks roundstate) id)(* .85 (total_bank roundstate))) 
+ ;     (progn  
+  ;      ;(format t "85tile")
+   ;   (return-from action (LIST :allin)))) ;;try to finish off players
   
   (case (list-length (holdemround-commoncards roundstate))
-    (0 (return-from action (before-flop roundstate id)))
+    (0 (return-from action (blind roundstate id)))
         ;;you can only see your two cards
-    (3 (return-from action (after-flop roundstate id)))
+    (3 (return-from action (informed roundstate id)))
         ;;you can see the three cards on the table and your two cards
-    (4 (return-from action (after-turn roundstate id)))
+    (4 (return-from action (informed roundstate id)))
         ;;you can see the four cards on the table and your two cards
-    (5 (return-from action (after-river roundstate id)))))
+    (5 (return-from action (informed roundstate id)))))
         ;;you can see all five cards on the table and your two cards
 
 (defun informed(state id)
   (let ((cards (append (my_cards state id) (holdemround-commoncards state)))
-        (mybank (aref (holdemround-playerbanks state) id)))
+        (mybank (aref (holdemround-playerbanks state) id))(public_cards (list-length (holdemround-commoncards state))))
   (if (or (flushp cards) (straightp cards) (straightflushp cards) (fullhousep cards) (fourkindp cards) ) ;; if I have something good
-    (return-from informed (betamount state id 0.40))
-    (if (and (or (pairp cards) (twopairp cards) (tripsp cards) (< 5 (list-length (holdemround-commoncards state)))) (< (holdemround-bet state) ( * 0.75 mybank)))  ;; not so good
+    (return-from informed (betamount state id 0.65))
+    (if (and (or (pairp cards) (twopairp cards) (tripsp cards) (>= 5 public_cards)) (< (holdemround-bet state) ( * 0.55 mybank)))  ;; not so good
       (case (random 3)
-        (0 (return-from informed (betamount state id 0.13)))
+        (0 (return-from informed (betamount state id 0.15)))
         (t (LIST :call)))
       ;; my hand sucks
-      (if (and (< (holdemround-bet state) (* .35 mybank))(< 5 (list-length (holdemround-commoncards state)))) ;; if bet is under 15% of my bank
-          (LIST :check)
-        (LIST :call)))
+      (if (and (< (holdemround-bet state) (* .20 mybank)) (>= 5 public_cards)) ;; if bet is under 15% of my bank
+          (LIST :call)
+         (LIST :fold)))
     ) 
 ))
 
